@@ -31167,6 +31167,26 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       defaults: { records: 3, depth: 2, pretty: 1 }
     },
     {
+      id: "financial-freedom",
+      title: "T\u1EF1 do t\xE0i ch\xEDnh",
+      description: "T\xEDnh m\u1EE5c ti\xEAu t\u1EF1 do t\xE0i ch\xEDnh, t\u1EF7 l\u1EC7 FI, n\u1EE3, qu\u1EF9 kh\u1EA9n c\u1EA5p v\xE0 quy t\u1EAFc 72.",
+      path: "/tu-do-tai-chinh",
+      category: "T\u1EF1 do t\xE0i ch\xEDnh",
+      kind: "financial-freedom",
+      defaults: {
+        monthlyExpenses: 2e7,
+        monthlyPassiveIncome: 8e6,
+        monthlyDebtPayment: 5e6,
+        monthlyIncome: 4e7,
+        monthlySavings: 6e6,
+        assets: 12e8,
+        liabilities: 3e8,
+        emergencyMonths: 6,
+        growthRate: 8,
+        investmentYears: 10
+      }
+    },
+    {
       id: "retirement",
       title: "T\xEDnh s\u1ED1 ti\u1EC1n ngh\u1EC9 h\u01B0u",
       description: "M\u1EABu t\xEDnh s\u1ED1 ti\u1EC1n ngh\u1EC9 h\u01B0u v\u1EDBi gi\xE1 tr\u1ECB m\u1EB7c \u0111\u1ECBnh.",
@@ -31191,12 +31211,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       defaults: { monthlyExpenses: 3e7, months: 6 }
     },
     {
-      id: "six-bottle",
-      title: "T\xEDnh ph\xE2n b\u1ED5 theo nguy\xEAn l\xFD 6 chi\u1EBFc l\u1ECD",
-      description: "M\u1EABu ph\xE2n b\u1ED5 t\xE0i ch\xEDnh theo nguy\xEAn l\xFD 6 chi\u1EBFc l\u1ECD.",
+      id: "seven-bottle",
+      title: "T\xEDnh ph\xE2n b\u1ED5 theo nguy\xEAn l\xFD 7 chi\u1EBFc l\u1ECD",
+      description: "M\u1EABu ph\xE2n b\u1ED5 t\xE0i ch\xEDnh theo m\xF4 h\xECnh 7 chi\u1EBFc l\u1ECD v\u1EDBi c\xE1c t\u1EF7 l\u1EC7 nh\u1EADp tay v\xE0 n\xFAt reset v\u1EC1 m\u1EB7c \u0111\u1ECBnh.",
       path: "/6-chiec-lo",
       category: "T\u1EF1 do t\xE0i ch\xEDnh",
-      defaults: { income: 3e7, ratio: 50 }
+      defaults: {
+        income: 3e7,
+        essential: 40,
+        investment: 20,
+        shortTerm: 10,
+        lifestyle: 10,
+        education: 5,
+        charity: 5,
+        emergency: 10
+      }
     },
     {
       id: "bmi",
@@ -31310,7 +31339,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 dark:bg-slate-800 dark:text-slate-300", children: currentPage.path })
             ] })
           ] }),
-          currentPage.kind === "simple-interest" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(SimpleInterestPage, { page: currentPage }) : currentPage.kind === "compound-interest" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CompoundInterestPage, { page: currentPage }) : currentPage.id === "electricity" || currentPage.id === "water" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(UtilityBillPage, { page: currentPage }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(DefaultValuePage, { page: currentPage })
+          currentPage.kind === "simple-interest" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(SimpleInterestPage, { page: currentPage }) : currentPage.kind === "compound-interest" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CompoundInterestPage, { page: currentPage }) : currentPage.kind === "financial-freedom" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(FinancialFreedomPage, { page: currentPage }) : currentPage.id === "electricity" || currentPage.id === "water" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(UtilityBillPage, { page: currentPage }) : currentPage.id === "six-bottle" || currentPage.id === "seven-bottle" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(SevenBottlePage, { page: currentPage }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(DefaultValuePage, { page: currentPage })
         ] })
       ] })
     ] });
@@ -31474,6 +31503,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const usage = values.usage ?? 0;
     const serviceFee = values.serviceFee ?? 0;
     const tiers = getUtilityTiers(page.id);
+    const isWater = page.id === "water";
     function updateField(field, nextValue) {
       setValues((current) => ({ ...current, [field]: nextValue }));
     }
@@ -31490,11 +31520,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       };
     });
     const subtotal = breakdown.reduce((sum, item) => sum + item.cost, 0);
-    const total = subtotal + serviceFee;
+    const environmentalFee = isWater ? subtotal * 0.05 : 0;
+    const total = subtotal + serviceFee + environmentalFee;
     return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "space-y-4", children: [
       /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "grid gap-4 md:grid-cols-2", children: [
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "space-y-2", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Label2, { htmlFor: "usage", children: "S\u1ED1 l\u01B0\u1EE3ng s\u1EED d\u1EE5ng" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Label2, { htmlFor: "usage", children: isWater ? "L\u01B0\u1EE3ng n\u01B0\u1EDBc s\u1EED d\u1EE5ng" : "S\u1ED1 l\u01B0\u1EE3ng s\u1EED d\u1EE5ng" }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
             Input,
             {
@@ -31552,12 +31583,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 " \u20AB"
               ] })
             ] }),
+            isWater ? /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: "Ph\xED b\u1EA3o v\u1EC7 m\xF4i tr\u01B0\u1EDDng (5%)" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-xl font-semibold", children: [
+                environmentalFee.toLocaleString("vi-VN"),
+                " \u20AB"
+              ] })
+            ] }) : null,
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "space-y-2", children: breakdown.map((item) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-slate-800", children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { children: item.label }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { children: [
                 item.amount.toLocaleString("vi-VN"),
                 " ",
-                page.id === "electricity" ? "kWh" : "m3",
+                isWater ? "m3" : "kWh",
                 " \xD7 ",
                 item.price.toLocaleString("vi-VN"),
                 " \u20AB"
@@ -31575,7 +31613,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               "\u0110\xE3 nh\u1EADp ",
               usage.toLocaleString("vi-VN"),
               " ",
-              page.id === "electricity" ? "kWh" : "m3",
+              isWater ? "m3" : "kWh",
               "."
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { children: [
@@ -31583,7 +31621,301 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               serviceFee.toLocaleString("vi-VN"),
               " \u20AB."
             ] }),
+            isWater ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "Ph\xED b\u1EA3o v\u1EC7 m\xF4i tr\u01B0\u1EDDng \u0111\u01B0\u1EE3c t\xEDnh t\u1EF1 \u0111\u1ED9ng b\u1EB1ng 5% tr\xEAn ti\u1EC1n h\xE0ng theo b\u1EADc." }) : null,
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "B\u1EA1n c\xF3 th\u1EC3 thay \u0111\u1ED5i gi\xE1 \u1EDF t\u1EEBng \xF4 nh\u1EADp b\xEAn tr\xEAn \u0111\u1EC3 th\u1EED c\xE1c m\u1EE9c gi\xE1 kh\xE1c nhau." })
+          ] })
+        ] })
+      ] })
+    ] });
+  }
+  function FinancialFreedomPage({ page }) {
+    const [values, setValues] = (0, import_react4.useState)(page.defaults);
+    function updateField(field, nextValue) {
+      setValues((current) => ({ ...current, [field]: nextValue }));
+    }
+    const monthlyExpenses = values.monthlyExpenses ?? 0;
+    const monthlyPassiveIncome = values.monthlyPassiveIncome ?? 0;
+    const monthlyDebtPayment = values.monthlyDebtPayment ?? 0;
+    const monthlyIncome = values.monthlyIncome ?? 0;
+    const monthlySavings = values.monthlySavings ?? 0;
+    const assets = values.assets ?? 0;
+    const liabilities = values.liabilities ?? 0;
+    const emergencyMonths = values.emergencyMonths ?? 6;
+    const growthRate = values.growthRate ?? 0;
+    const investmentYears = values.investmentYears ?? 10;
+    const annualExpenses = monthlyExpenses * 12;
+    const fiTarget = annualExpenses * 25;
+    const fiRatio = monthlyExpenses > 0 ? monthlyPassiveIncome / monthlyExpenses : 0;
+    const debtRatio = monthlyIncome > 0 ? monthlyDebtPayment / monthlyIncome : 0;
+    const netWorth = assets - liabilities;
+    const savingsRate = monthlyIncome > 0 ? monthlySavings / monthlyIncome : 0;
+    const emergencyFundTarget = monthlyExpenses * emergencyMonths;
+    const emergencyFundMin = monthlyExpenses * 6;
+    const emergencyFundMax = monthlyExpenses * 12;
+    const yearsToDouble = growthRate > 0 ? 72 / growthRate : 0;
+    const projectedValue = netWorth * Math.pow(1 + growthRate / 100, investmentYears);
+    const fiStatus = fiRatio >= 1 ? "\u0110\xE3 \u0111\u1EA1t m\u1EE5c ti\xEAu FI" : fiRatio >= 0.5 ? "\u0110ang \u1EDF n\u1EEDa ch\u1EB7ng \u0111\u01B0\u1EDDng" : "C\u1EA7n t\u0103ng thu nh\u1EADp th\u1EE5 \u0111\u1ED9ng";
+    const debtStatus = debtRatio < 0.3 ? "T\u1ED1t" : debtRatio < 0.4 ? "Ch\u1EA5p nh\u1EADn \u0111\u01B0\u1EE3c" : "Nguy hi\u1EC3m";
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "space-y-4", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "grid gap-4 md:grid-cols-2 xl:grid-cols-3", children: [
+        { key: "monthlyExpenses", label: "Chi ph\xED h\xE0ng th\xE1ng", unit: "\u20AB" },
+        { key: "monthlyPassiveIncome", label: "Thu nh\u1EADp th\u1EE5 \u0111\u1ED9ng h\xE0ng th\xE1ng", unit: "\u20AB" },
+        { key: "monthlyDebtPayment", label: "Ti\u1EC1n tr\u1EA3 n\u1EE3 h\xE0ng th\xE1ng", unit: "\u20AB" },
+        { key: "monthlyIncome", label: "Thu nh\u1EADp h\xE0ng th\xE1ng", unit: "\u20AB" },
+        { key: "monthlySavings", label: "S\u1ED1 ti\u1EC1n ti\u1EBFt ki\u1EC7m h\xE0ng th\xE1ng", unit: "\u20AB" },
+        { key: "assets", label: "T\xE0i s\u1EA3n", unit: "\u20AB" },
+        { key: "liabilities", label: "N\u1EE3", unit: "\u20AB" },
+        { key: "emergencyMonths", label: "S\u1ED1 th\xE1ng qu\u1EF9 kh\u1EA9n c\u1EA5p", unit: "th\xE1ng" },
+        { key: "growthRate", label: "L\xE3i su\u1EA5t k\u1EF3 v\u1ECDng (%)", unit: "%" },
+        { key: "investmentYears", label: "S\u1ED1 n\u0103m \u0111\u1EA7u t\u01B0", unit: "n\u0103m" }
+      ].map((field) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "space-y-2", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Label2, { htmlFor: field.key, children: field.label }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          Input,
+          {
+            id: field.key,
+            type: "number",
+            value: values[field.key] ?? 0,
+            onChange: (event) => updateField(field.key, Number(event.target.value))
+          }
+        )
+      ] }, field.key)) }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "flex flex-wrap gap-3", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Button, { onClick: () => setValues({ ...page.defaults }), children: "Reset gi\xE1 tr\u1ECB m\u1EB7c \u0111\u1ECBnh" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "grid gap-4 xl:grid-cols-[1.2fr_0.8fr]", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "grid gap-4 md:grid-cols-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(Card, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardHeader, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardTitle, { children: "M\u1EE5c ti\xEAu t\u1EF1 do t\xE0i ch\xEDnh" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardDescription, { children: "Quy t\u1EAFc 4%: m\u1EE5c ti\xEAu c\u1EA7n c\xF3 = chi ph\xED n\u0103m \xD7 25" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardContent, { className: "space-y-3", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: "Chi ph\xED n\u0103m" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-2xl font-semibold", children: [
+                  annualExpenses.toLocaleString("vi-VN"),
+                  " \u20AB"
+                ] })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: "M\u1EE5c ti\xEAu FI" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-2xl font-semibold", children: [
+                  fiTarget.toLocaleString("vi-VN"),
+                  " \u20AB"
+                ] })
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(Card, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardHeader, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardTitle, { children: "Ch\u1EC9 s\u1ED1 t\xE0i ch\xEDnh" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardDescription, { children: "\u0110\xE1nh gi\xE1 ti\u1EBFn \u0111\u1ED9 v\xE0 m\u1EE9c \u0111\u1ED9 an to\xE0n" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardContent, { className: "space-y-3", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: "FI Ratio" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-2xl font-semibold", children: [
+                  (fiRatio * 100).toFixed(1),
+                  "%"
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-600 dark:text-slate-300", children: fiStatus })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: "T\u1EF7 l\u1EC7 n\u1EE3" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-2xl font-semibold", children: [
+                  (debtRatio * 100).toFixed(1),
+                  "%"
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-600 dark:text-slate-300", children: debtStatus })
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(Card, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardHeader, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardTitle, { children: "Qu\u1EF9 kh\u1EA9n c\u1EA5p" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardDescription, { children: "Khuy\u1EBFn ngh\u1ECB 6\u201312 th\xE1ng chi ph\xED" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardContent, { className: "space-y-3", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: [
+                  "M\u1EE5c ti\xEAu theo ",
+                  emergencyMonths,
+                  " th\xE1ng"
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-2xl font-semibold", children: [
+                  emergencyFundTarget.toLocaleString("vi-VN"),
+                  " \u20AB"
+                ] })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: "Khuy\u1EBFn ngh\u1ECB 6\u201312 th\xE1ng" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-xl font-semibold", children: [
+                  emergencyFundMin.toLocaleString("vi-VN"),
+                  " \u20AB \u2013 ",
+                  emergencyFundMax.toLocaleString("vi-VN"),
+                  " \u20AB"
+                ] })
+              ] })
+            ] })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(Card, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardHeader, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardTitle, { children: "Quy t\u1EAFc 72 & l\xE3i k\xE9p" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardDescription, { children: "\u01AF\u1EDBc t\xEDnh th\u1EDDi gian t\u0103ng g\u1EA5p \u0111\xF4i v\xE0 gi\xE1 tr\u1ECB t\u01B0\u01A1ng lai" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardContent, { className: "space-y-3", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: "Th\u1EDDi gian t\u0103ng g\u1EA5p \u0111\xF4i" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-2xl font-semibold", children: [
+                  yearsToDouble.toFixed(1),
+                  " n\u0103m"
+                ] })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: "Gi\xE1 tr\u1ECB t\u01B0\u01A1ng lai" }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-2xl font-semibold", children: [
+                  projectedValue.toLocaleString("vi-VN"),
+                  " \u20AB"
+                ] })
+              ] })
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(Card, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardHeader, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardTitle, { children: "T\xF3m t\u1EAFt nhanh" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardDescription, { children: "Nh\u1EEFng ch\u1EC9 s\u1ED1 c\u1ED1t l\xF5i \u0111\u1EC3 theo d\xF5i ti\u1EBFn \u0111\u1ED9 FI" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardContent, { className: "space-y-3 text-sm text-slate-600 dark:text-slate-300", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg border border-slate-200 p-3 dark:border-slate-800", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-slate-500 dark:text-slate-400", children: "T\xE0i s\u1EA3n r\xF2ng" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-xl font-semibold text-slate-900 dark:text-slate-100", children: [
+                netWorth.toLocaleString("vi-VN"),
+                " \u20AB"
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg border border-slate-200 p-3 dark:border-slate-800", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-slate-500 dark:text-slate-400", children: "T\u1EF7 l\u1EC7 ti\u1EBFt ki\u1EC7m" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-xl font-semibold text-slate-900 dark:text-slate-100", children: [
+                (savingsRate * 100).toFixed(1),
+                "%"
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg border border-slate-200 p-3 dark:border-slate-800", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-slate-500 dark:text-slate-400", children: "C\xF4ng th\u1EE9c d\xF9ng" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "FI target = chi ph\xED n\u0103m \xD7 25" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "FI ratio = thu nh\u1EADp th\u1EE5 \u0111\u1ED9ng / chi ph\xED" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "Debt ratio = tr\u1EA3 n\u1EE3 / thu nh\u1EADp" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "Qu\u1EF9 kh\u1EA9n c\u1EA5p = chi ph\xED \xD7 6\u201312 th\xE1ng" })
+            ] })
+          ] })
+        ] })
+      ] })
+    ] });
+  }
+  function SevenBottlePage({ page }) {
+    const [values, setValues] = (0, import_react4.useState)(page.defaults);
+    function updateField(field, nextValue) {
+      setValues((current) => ({ ...current, [field]: nextValue }));
+    }
+    const income = values.income ?? 0;
+    const ratioFields = [
+      { key: "essential", label: "L\u1ECD 1 \u2013 C\u1EA7n thi\u1EBFt", description: "Nh\xE0 \u1EDF, th\u1EF1c ph\u1EA9m, \u0111i l\u1EA1i" },
+      { key: "investment", label: "L\u1ECD 2 \u2013 \u0110\u1EA7u t\u01B0", description: "Qu\u1EF9 d\xE0i h\u1EA1n, \u0111\u1EA7u t\u01B0" },
+      { key: "shortTerm", label: "L\u1ECD 3 \u2013 M\u1EE5c ti\xEAu ng\u1EAFn h\u1EA1n", description: "Du l\u1ECBch, mua s\u1EAFm l\u1EDBn" },
+      { key: "lifestyle", label: "L\u1ECD 4 \u2013 Phong c\xE1ch s\u1ED1ng", description: "Gi\u1EA3i tr\xED, s\u1EDF th\xEDch" },
+      { key: "education", label: "L\u1ECD 5 \u2013 Gi\xE1o d\u1EE5c", description: "Kh\xF3a h\u1ECDc, ph\xE1t tri\u1EC3n b\u1EA3n th\xE2n" },
+      { key: "charity", label: "L\u1ECD 6 \u2013 T\u1EEB thi\u1EC7n", description: "Quy\xEAn g\xF3p, h\u1ED7 tr\u1EE3 c\u1ED9ng \u0111\u1ED3ng" },
+      { key: "emergency", label: "L\u1ECD 7 \u2013 Kh\u1EA9n c\u1EA5p", description: "Qu\u1EF9 d\u1EF1 ph\xF2ng, s\u1EF1 c\u1ED1" }
+    ];
+    const allocations = ratioFields.map((field) => {
+      const percent = values[field.key] ?? 0;
+      return {
+        ...field,
+        percent,
+        amount: income * (percent / 100)
+      };
+    });
+    const totalPercent = allocations.reduce((sum, item) => sum + item.percent, 0);
+    const totalAllocated = allocations.reduce((sum, item) => sum + item.amount, 0);
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "space-y-4", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "grid gap-4 md:grid-cols-2 xl:grid-cols-3", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "space-y-2 md:col-span-2 xl:col-span-1", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Label2, { htmlFor: "income", children: "Thu nh\u1EADp h\xE0ng th\xE1ng" }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+            Input,
+            {
+              id: "income",
+              type: "number",
+              value: values.income ?? 0,
+              onChange: (event) => updateField("income", Number(event.target.value))
+            }
+          )
+        ] }),
+        ratioFields.map((field) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "space-y-2", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Label2, { htmlFor: field.key, children: field.label }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+            Input,
+            {
+              id: field.key,
+              type: "number",
+              value: values[field.key] ?? 0,
+              onChange: (event) => updateField(field.key, Number(event.target.value))
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-xs text-slate-500 dark:text-slate-400", children: field.description })
+        ] }, field.key))
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "flex flex-wrap gap-3", children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Button, { onClick: () => setValues({ ...page.defaults }), children: "Reset gi\xE1 tr\u1ECB m\u1EB7c \u0111\u1ECBnh" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "grid gap-4 xl:grid-cols-[1.15fr_0.85fr]", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(Card, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardHeader, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardTitle, { children: "Ph\xE2n b\u1ED5 theo t\u1EEBng l\u1ECD" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardDescription, { children: "C\xF4ng th\u1EE9c d\xF9ng: s\u1ED1 ti\u1EC1n l\u1ECD = thu nh\u1EADp \xD7 t\u1EF7 l\u1EC7 / 100" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardContent, { className: "space-y-3", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: "T\u1ED5ng ph\u1EA7n tr\u0103m" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-2xl font-semibold", children: [
+                totalPercent.toFixed(1),
+                "%"
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "rounded-lg bg-slate-50 p-3 dark:bg-slate-800", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "text-sm text-slate-500 dark:text-slate-400", children: "T\u1ED5ng ti\u1EC1n ph\xE2n b\u1ED5" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-2xl font-semibold", children: [
+                totalAllocated.toLocaleString("vi-VN"),
+                " \u20AB"
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: "space-y-2", children: allocations.map((item) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { className: "flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2 text-sm dark:border-slate-800", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "font-medium", children: item.label }),
+                /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "text-slate-500 dark:text-slate-400", children: [
+                  item.percent,
+                  "%"
+                ] })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { className: "font-semibold", children: [
+                item.amount.toLocaleString("vi-VN"),
+                " \u20AB"
+              ] })
+            ] }, item.key)) })
+          ] })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(Card, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardHeader, { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardTitle, { children: "G\u1EE3i \xFD nhanh" }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CardDescription, { children: "\u0110i\u1EC1u ch\u1EC9nh c\xE1c t\u1EF7 l\u1EC7 \u0111\u1EC3 ph\xF9 h\u1EE3p v\u1EDBi m\u1EE5c ti\xEAu t\xE0i ch\xEDnh" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(CardContent, { className: "space-y-3 text-sm text-slate-600 dark:text-slate-300", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("p", { children: [
+              "Thu nh\u1EADp nh\u1EADp v\xE0o: ",
+              income.toLocaleString("vi-VN"),
+              " \u20AB."
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "C\xF4ng th\u1EE9c d\xF9ng cho m\u1ED7i l\u1ECD l\xE0 thu nh\u1EADp \xD7 ph\u1EA7n tr\u0103m / 100." }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: totalPercent === 100 ? "T\u1ED5ng t\u1EF7 l\u1EC7 \u0111ang b\u1EB1ng 100%, ph\xF9 h\u1EE3p v\u1EDBi m\xF4 h\xECnh ph\xE2n b\u1ED5 \u0111\u1EA7y \u0111\u1EE7." : `B\u1EA1n c\xF2n thi\u1EBFu ${(100 - totalPercent).toFixed(1)}% \u0111\u1EC3 \u0111\u1EA1t t\u1ED5ng 100%.` }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { children: "N\u1EBFu mu\u1ED1n, b\u1EA1n c\xF3 th\u1EC3 thay \u0111\u1ED5i t\u1EF7 l\u1EC7 t\u1EEBng l\u1ECD cho ph\xF9 h\u1EE3p v\u1EDBi m\u1EE5c ti\xEAu c\xE1 nh\xE2n." })
           ] })
         ] })
       ] })

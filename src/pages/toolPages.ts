@@ -4,7 +4,7 @@ export type ToolPage = {
   description: string;
   path: string;
   category: string;
-  kind?: "simple-interest" | "compound-interest";
+  kind?: "simple-interest" | "compound-interest" | "financial-freedom";
   defaults: Record<string, number>;
 };
 
@@ -115,6 +115,26 @@ export const toolPages: ToolPage[] = [
     defaults: { records: 3, depth: 2, pretty: 1 },
   },
   {
+    id: "financial-freedom",
+    title: "Tự do tài chính",
+    description: "Tính mục tiêu tự do tài chính, tỷ lệ FI, nợ, quỹ khẩn cấp và quy tắc 72.",
+    path: "/tu-do-tai-chinh",
+    category: "Tự do tài chính",
+    kind: "financial-freedom",
+    defaults: {
+      monthlyExpenses: 20000000,
+      monthlyPassiveIncome: 8000000,
+      monthlyDebtPayment: 5000000,
+      monthlyIncome: 40000000,
+      monthlySavings: 6000000,
+      assets: 1200000000,
+      liabilities: 300000000,
+      emergencyMonths: 6,
+      growthRate: 8,
+      investmentYears: 10,
+    },
+  },
+  {
     id: "retirement",
     title: "Tính số tiền nghỉ hưu",
     description: "Mẫu tính số tiền nghỉ hưu với giá trị mặc định.",
@@ -139,12 +159,21 @@ export const toolPages: ToolPage[] = [
     defaults: { monthlyExpenses: 30000000, months: 6 },
   },
   {
-    id: "six-bottle",
-    title: "Tính phân bổ theo nguyên lý 6 chiếc lọ",
-    description: "Mẫu phân bổ tài chính theo nguyên lý 6 chiếc lọ.",
+    id: "seven-bottle",
+    title: "Tính phân bổ theo nguyên lý 7 chiếc lọ",
+    description: "Mẫu phân bổ tài chính theo mô hình 7 chiếc lọ với các tỷ lệ nhập tay và nút reset về mặc định.",
     path: "/6-chiec-lo",
     category: "Tự do tài chính",
-    defaults: { income: 30000000, ratio: 50 },
+    defaults: {
+      income: 30000000,
+      essential: 40,
+      investment: 20,
+      shortTerm: 10,
+      lifestyle: 10,
+      education: 5,
+      charity: 5,
+      emergency: 10,
+    },
   },
   {
     id: "bmi",
